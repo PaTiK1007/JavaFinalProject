@@ -1,5 +1,5 @@
 package edu.handong.java.data;
 
-public class DataSheet {
+public class SecondDataSheet {
 
 }

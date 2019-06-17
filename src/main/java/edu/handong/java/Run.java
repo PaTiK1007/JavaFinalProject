@@ -1,5 +1,8 @@
 package edu.handong.java;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -7,11 +10,31 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
+import edu.handong.java.utils.ZipReader;
+
 public class Run {
 	
 	private String input;
 	private String output;
+	private boolean help;
 	
+	public void finalExcute(String[] args) throws IOException{
+		Options options = createOptions();
+		ArrayList<String> linesToBeSaved = new ArrayList<String>();
+		
+		
+		if(parseOptions(options, args)){
+			if (help){
+				printHelp(options);
+				return;
+			}
+		}
+		
+		ZipReader read = new ZipReader();
+		
+		
+		
+	}
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -22,7 +45,7 @@ public class Run {
 			
 			input = cmd.getOptionValue("i");
 			output = cmd.getOptionValue("o");
-			
+			help = cmd.hasOption("h");
 			
 			
 
@@ -51,6 +74,10 @@ public class Run {
 				.argName("Output path")
 				.required() 
 				.build());
+		
+		options.addOption(Option.builder("h").longOpt("help")
+		        .desc("Show a Help page")
+		        .build());
 
 		return options;
 	}
