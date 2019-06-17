@@ -3,7 +3,7 @@ package edu.handong.java.utils;
 public class FileBrokenException extends Exception {
 
 	public FileBrokenException() {
-		super ("No CLI argument Exception! Please put a file path.");
+		super ("Error ocurred");
 	}
 		
 	public FileBrokenException(String message){

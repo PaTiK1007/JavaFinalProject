@@ -9,17 +9,13 @@ import java.util.Enumeration;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import edu.handong.java.data.FirstDataSheet;
-
 public class ZipReader {
 
-	public ArrayList<String> ZipReader(String path) throws FileBrokenException {
+	public static ArrayList<String> ZipRead(String path) throws FileBrokenException {
 		
 		ArrayList<String> resultLines = new ArrayList<String> ();
 		ZipFile zipFile;
 		File dir = new File(path);
-		String line;
-		boolean next =false;
 		
 		for(File file : dir.listFiles()){
 			
@@ -36,11 +32,10 @@ public class ZipReader {
 		    
 		        ExcelReader myReader = new ExcelReader();
 		        
-		        for(FirstDataSheet value:myReader.getData(stream)) {
+		        for(String value:myReader.getData(stream)) {
 		        	
-		        	line = value.getTitle() + ",";
-		        	System.out.println(line);
-		        	
+		        	resultLines.add(value);
+		        
 		        }
 		        
 		        

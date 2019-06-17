@@ -2,6 +2,7 @@ package edu.handong.java;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -12,7 +13,7 @@ import org.apache.commons.cli.Options;
 
 import edu.handong.java.utils.ZipReader;
 
-public class Run {
+public class Runner {
 	
 	private String input;
 	private String output;
@@ -30,11 +31,21 @@ public class Run {
 			}
 		}
 		
-		ZipReader read = new ZipReader();
+		
+		ZipReader read = new ZipReader(input);
 		
 		
 		
 	}
+	
+	private ArrayList<String> option1(ArrayList<String> line) {
+		ArrayList<String> printLine = new ArrayList<String>();
+		
+		
+	
+		return printLine;
+	}
+	
 	
 	private boolean parseOptions(Options options, String[] args) {
 		CommandLineParser parser = new DefaultParser();
@@ -89,4 +100,10 @@ public class Run {
 		String footer ="";
 		formatter.printHelp("Final project", header, options, footer, true);
 	}
+
+	public String getInput() {
+		return input;
+	}
+	
+	
 }

@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args)throws IOException {
 	
-		Run fileCombiner = new Run();
+		Runner fileCombiner = new Runner();
 		fileCombiner.finalExcute(args);
 
 	}
