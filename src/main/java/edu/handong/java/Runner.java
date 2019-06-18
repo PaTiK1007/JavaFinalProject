@@ -11,6 +11,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
+import edu.handong.java.utils.FileBrokenException;
 import edu.handong.java.utils.ZipReader;
 
 public class Runner {
@@ -21,7 +22,6 @@ public class Runner {
 	
 	public void finalExcute(String[] args) throws IOException{
 		Options options = createOptions();
-		ArrayList<String> linesToBeSaved = new ArrayList<String>();
 		
 		
 		if(parseOptions(options, args)){
@@ -31,10 +31,7 @@ public class Runner {
 			}
 		}
 		
-		
-		ZipReader read = new ZipReader(input);
-		
-		
+		ZipReader.readZIPAndWriteCSV(input, output);
 		
 	}
 	
@@ -99,10 +96,6 @@ public class Runner {
 		String header = "File combiner";
 		String footer ="";
 		formatter.printHelp("Final project", header, options, footer, true);
-	}
-
-	public String getInput() {
-		return input;
 	}
 	
 	
