@@ -24,7 +24,7 @@ public class ExcelReader {
 		private HashMap<String, ArrayList<SecondDataSheet>> secondDataMap = new HashMap<String, ArrayList<SecondDataSheet>>();
 		
 		
-		public void getData(InputStream excelFile, String studentID, String path) {
+		public void getData(InputStream excelFile, String studentID) {
 			
 			ArrayList<String> values = new ArrayList<String>();
 			

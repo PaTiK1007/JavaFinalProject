@@ -55,7 +55,7 @@ public class ZipReader extends Thread {
 		    while(entries.hasMoreElements()){
 		    	ZipArchiveEntry entry = entries.nextElement();
 		        InputStream stream = zipFile.getInputStream(entry);
-		        excelReader.getData(stream, id, path);
+		        excelReader.getData(stream, id);
 		        
 		    }  
 		    zipFile.close();
