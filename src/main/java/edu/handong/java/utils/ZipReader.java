@@ -19,7 +19,7 @@ import edu.handong.java.data.SecondDataSheet;
 
 public class ZipReader extends Thread {
 	
-	static ExcelReader excelReader = new ExcelReader();
+	private static ExcelReader excelReader = new ExcelReader();
 	
 	public static void readZIPAndWriteCSV(String input, String output) throws IOException, InterruptedException{
 		File dir = new File(input);
