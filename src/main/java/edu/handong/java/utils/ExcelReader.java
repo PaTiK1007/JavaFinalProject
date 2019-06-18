@@ -20,8 +20,8 @@ import edu.handong.java.data.SecondDataSheet;
 public class ExcelReader {
 		
 		private static String id;
-		private HashMap<String, ArrayList<FirstDataSheet>> firstData = new HashMap<String, ArrayList<FirstDataSheet>>();
-		private HashMap<String, ArrayList<SecondDataSheet>> secondData = new HashMap<String, ArrayList<SecondDataSheet>>();
+		private HashMap<String, ArrayList<FirstDataSheet>> firstDataMap = new HashMap<String, ArrayList<FirstDataSheet>>();
+		private HashMap<String, ArrayList<SecondDataSheet>> secondDataMap = new HashMap<String, ArrayList<SecondDataSheet>>();
 		
 		
 		public void getData(InputStream excelFile, String studentID, String path) {
@@ -37,11 +37,12 @@ public class ExcelReader {
 			        Workbook wb = WorkbookFactory.create(inp);
 			        Sheet sheet = wb.getSheetAt(0);
 			        Row firstRow = sheet.getRow(0);
+			        Row secondRow = sheet.getRow(1);
 			        Cell firstCell = firstRow.getCell(0);
 			        
+			        
 			        if(firstCell.getStringCellValue().equals("제목")) {
-			        	int i=1;
-				        int j=0;
+			        	
 				        
 			        	try{
 			        		if(firstRow.getPhysicalNumberOfCells()>7) {
@@ -52,40 +53,39 @@ public class ExcelReader {
 			        		System.exit(0);
 			        	}
 			        	
+			        	Sheet sheetCal = wb.getSheetAt(0);
 				        
-				        while(true){ 	
-				        	Row row = sheet.getRow(i);
-				        	if(row==null) {
-				        		break;
-				        	}
-				        	Cell cell = row.getCell(j++);
+				        for(int i = 1; i <= sheetCal.getLastRowNum();i++) {
+				        	Row row = sheetCal.getRow(i);
 				        	
-				        	
-				        	if(cell==null && j==7) {
-				        		i++;
-				        		j=0;
-				        		FirstDataSheet firstData = new FirstDataSheet(values);
-				        		firstTemp.add(firstData);
-				        		values.clear();
-				        		
-				        		
-				        	}else if(cell==null && j<=7){
-				        		cell = row.createCell(0);
-				        		cell.setCellValue(" ");
-				        		values.add(cell.getStringCellValue());
-				        		
-				        		
-				        	}
+					        for(int j = 0; j <= 6; j++) {
+					        	Cell cell = row.getCell(j);
+					        	
+						        if (cell == null) {
+						            cell = row.createCell(0);
+					        		values.add(cell.getStringCellValue());
+				        		}else if(cell.getCellType() == CellType.NUMERIC) {
+			        				values.add(Double.toString(cell.getNumericCellValue()));
+			        			}else if(cell.getCellType() == CellType.BLANK){
+			        				cell.setCellValue(" ");
+			        				values.add(cell.getStringCellValue());
+			        			}else {
+				        			values.add(cell.getStringCellValue());
+			        			}
+				        
+						        if(j==6) {
+						        	FirstDataSheet firstData = new FirstDataSheet(values);
+						        	firstTemp.add(firstData);
+						        	values.clear();
+						        	}
 				        	
 				        }
-				        firstData.put(id, firstTemp);
+				     }
+				       firstDataMap.put(id, firstTemp);
 			        }else {
-			        	int i=2;
-			        	int j=0;
 			        	
 			        	try{
-			        		Row secondChecker = sheet.getRow(1);
-			        		if(secondChecker.getPhysicalNumberOfCells()>5) {
+			        		if(secondRow.getPhysicalNumberOfCells()>5) {
 				        		throw new FileBrokenException(inp);
 			        		}
 			        	}catch(FileBrokenException e) {
@@ -93,26 +93,37 @@ public class ExcelReader {
 			        		System.exit(0);
 			        	}
 			        	
-			        	
-			        	while(true){
-			        		Row row = sheet.getRow(i);
-			        		if(row==null) {
-			        			break;
-			        		}
-			        		Cell cell = row.getCell(j++);
-			        		if(cell==null && j==6) {
-			        			i++;
-			        			j=0;
-			        			SecondDataSheet secondData = new SecondDataSheet(values);
-			        			secondTemp.add(secondData);
-			        			values.clear();
-			        		}else if(cell==null && j<=5) {
-				        		cell = row.createCell(0);
-				        		cell.setCellValue(" ");
-				        		values.add(cell.getStringCellValue());
-			        		}
-			        	}
-			        	secondData.put(id, secondTemp);
+			        	Sheet sheetCal = wb.getSheetAt(0);
+			    
+			        	for(int i = 2; i <= sheetCal.getLastRowNum();i++) {
+				        	Row row = sheetCal.getRow(i);
+				        	
+					        for(int j = 0; j <= 4; j++) {
+					        	Cell cell = row.getCell(j);
+					        	
+					        	if (cell == null) {
+						            cell = row.createCell(0);
+					        		values.add(cell.getStringCellValue());
+				        		}else if(cell.getCellType() == CellType.NUMERIC) {
+			        				values.add(Double.toString(cell.getNumericCellValue()));
+			        			}else if(cell.getCellType() == CellType.BLANK){
+			        				cell.setCellValue(" ");
+			        				values.add(cell.getStringCellValue());
+			        			}else {
+				        			values.add(cell.getStringCellValue());
+			        			}
+				        
+				        
+						        if(j==4) {
+						        	SecondDataSheet secondData = new SecondDataSheet(values);
+				        			secondTemp.add(secondData);
+				        			values.clear();
+						        	}
+				        	
+				        }
+				     }
+			        		
+			        	secondDataMap.put(id, secondTemp);
 			        }
 			    } catch (FileNotFoundException e) {
 					e.printStackTrace();
@@ -122,10 +133,10 @@ public class ExcelReader {
 		}
 		
 		public HashMap<String, ArrayList<FirstDataSheet>> getFirstData() {
-			return firstData;
+			return firstDataMap;
 		}
 
 		public HashMap<String, ArrayList<SecondDataSheet>> getSecondData() {
-			return secondData;
+			return secondDataMap;
 		}
 	}

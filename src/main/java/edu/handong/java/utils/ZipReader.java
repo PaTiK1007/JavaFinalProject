@@ -25,7 +25,9 @@ public class ZipReader {
 		File dir = new File(input);
 		
 		for(File file:dir.listFiles()) {
-			readZip(file.getPath(),file.getName());
+			String fileName= file.getName();
+			String stID = fileName.split(".z")[0].trim();
+			readZip(file.getPath(),stID);
 		}
 		
 		writeCSV(output);
@@ -46,7 +48,7 @@ public class ZipReader {
 		        excelReader.getData(stream, id, path);
 		        
 		    }  
-		        
+		    zipFile.close();
 		    
 		} catch (IOException e) {
 			
@@ -73,6 +75,7 @@ public class ZipReader {
 				String domain = dats.getDomain();
 				String source = dats.getSource();
 				String copyright = dats.getCopyright();
+				
 				firstPrinter.printRecord(key, title, summary, keyword, date, domain, source, copyright);
 			}
 		}
