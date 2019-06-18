@@ -1,8 +1,6 @@
 package edu.handong.java;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -11,16 +9,17 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
-import edu.handong.java.utils.FileBrokenException;
 import edu.handong.java.utils.ZipReader;
 
 public class Runner {
+	
+	
 	
 	private String input;
 	private String output;
 	private boolean help;
 	
-	public void finalExcute(String[] args) throws IOException{
+	public void finalExcute(String[] args) throws IOException, InterruptedException{
 		Options options = createOptions();
 		
 		if(parseOptions(options, args)){
@@ -32,14 +31,6 @@ public class Runner {
 		
 		ZipReader.readZIPAndWriteCSV(input, output);
 		
-	}
-	
-	private ArrayList<String> option1(ArrayList<String> line) {
-		ArrayList<String> printLine = new ArrayList<String>();
-		
-		
-	
-		return printLine;
 	}
 	
 	
@@ -96,6 +87,9 @@ public class Runner {
 		String footer ="";
 		formatter.printHelp("Final project", header, options, footer, true);
 	}
+
+
+
 	
 	
 }

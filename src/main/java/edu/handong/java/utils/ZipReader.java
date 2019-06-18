@@ -3,7 +3,6 @@ package edu.handong.java.utils;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,24 +12,33 @@ import java.util.TreeMap;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 
+import edu.handong.java.threadManager;
 import edu.handong.java.data.FirstDataSheet;
 import edu.handong.java.data.SecondDataSheet;
 
-public class ZipReader {
+public class ZipReader extends Thread {
 	
 	static ExcelReader excelReader = new ExcelReader();
 	
-	public static void readZIPAndWriteCSV(String input, String output) throws IOException{
+	public static void readZIPAndWriteCSV(String input, String output) throws IOException, InterruptedException{
 		File dir = new File(input);
-		
+		 
+		Thread thread = null;
 		for(File file:dir.listFiles()) {
 			String fileName= file.getName();
 			String stID = fileName.split(".z")[0].trim();
-			readZip(file.getPath(),stID);
+			
+			thread = new Thread(new threadManager(file.getPath(),stID));
+			thread.start();
+			
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.getMessage();
+			}
 		}
+		
 		
 		writeAFile(output);
 		
