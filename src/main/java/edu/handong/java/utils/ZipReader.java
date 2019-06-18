@@ -68,8 +68,8 @@ public class ZipReader extends Thread {
 	
 	public static void writeAFile (String outputPath) {
 		
-		String firstFileName = "result1.csv";
-		String secondFileName = "result2.csv";
+		String firstFileName = "First_"+outputPath;
+		String secondFileName = "Second_"+outputPath;
 		
 		 Map<String, ArrayList<FirstDataSheet>> firstDataMap = new TreeMap<String, ArrayList<FirstDataSheet>>(excelReader.getFirstData());
 	     Map<String, ArrayList<SecondDataSheet>> sortedSecondType = new TreeMap<String, ArrayList<SecondDataSheet>>(excelReader.getSecondData());
