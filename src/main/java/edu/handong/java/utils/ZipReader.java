@@ -13,7 +13,7 @@ import java.util.TreeMap;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import edu.handong.java.threadManager;
+import edu.handong.java.ThreadManager;
 import edu.handong.java.data.FirstDataSheet;
 import edu.handong.java.data.SecondDataSheet;
 
@@ -29,7 +29,7 @@ public class ZipReader extends Thread {
 			String fileName= file.getName();
 			String stID = fileName.split(".z")[0].trim();
 			
-			thread = new Thread(new threadManager(file.getPath(),stID));
+			thread = new Thread(new ThreadManager(file.getPath(),stID));
 			thread.start();
 			
 			try {
