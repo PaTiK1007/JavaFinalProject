@@ -1,6 +1,8 @@
 package edu.handong.java.utils;
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +32,7 @@ public class ZipReader {
 			readZip(file.getPath(),stID);
 		}
 		
-		writeCSV(output);
+		writeAFile(output);
 		
 	}
 	
@@ -56,46 +58,80 @@ public class ZipReader {
 		}
 	}
 	
-	public static void writeCSV(String outputPath) throws IOException {
+	public static void writeAFile (String outputPath) {
+		
 		String firstFileName = "result1.csv";
 		String secondFileName = "result2.csv";
 		
+		 Map<String, ArrayList<FirstDataSheet>> firstDataMap = new TreeMap<String, ArrayList<FirstDataSheet>>(excelReader.getFirstData());
+	     Map<String, ArrayList<SecondDataSheet>> sortedSecondType = new TreeMap<String, ArrayList<SecondDataSheet>>(excelReader.getSecondData());
 		
-		FileWriter firstOut = new FileWriter(firstFileName);
-		CSVPrinter firstPrinter = CSVFormat.DEFAULT
-				.withHeader("학번", "제목", "요약문 (300자 내외)", "핵심어(keyword,귐표로 구분)", "조회날짜", "실제자료조회 출처 (웹자료링크)", "원출처 (기관명 등)", "제작자 (Copyright 소유처)").print(firstOut);
-		Map<String, ArrayList<FirstDataSheet>> firstDataMap = new TreeMap<String, ArrayList<FirstDataSheet>>(excelReader.getFirstData());
+		try {
+	         File fp1= new File(firstFileName);
+	         File fp2= new File(secondFileName);
+	         
+	         FileOutputStream fos1 = new FileOutputStream(fp1);
+	         DataOutputStream dos1 =new DataOutputStream(fos1);
+	         
+	         FileOutputStream fos2 = new FileOutputStream(fp2);
+	         DataOutputStream dos2 =new DataOutputStream(fos2);
+	         
+	       
+	 		ArrayList<String> lines1 = new ArrayList<String>();
+	 		ArrayList<String> lines2 = new ArrayList<String>();
+	 		 
+	 		for(String key:firstDataMap.keySet()) {
+	 			for(FirstDataSheet dats:excelReader.getFirstData().get(key)) {
+	 				String title = dats.getTitle();
+	 				String summary = dats.getSummary();
+	 				String keyword = dats.getKeyword();
+	 				String date = dats.getDate();
+	 				String domain = dats.getDomain();
+	 				String source = dats.getSource();
+	 				String copyright = dats.getCopyright();
+	 				
+	 				lines1.add(key +","+ "\""+title+"\"" + ","+ "\""+ summary+ "\"" + ","+"\""+keyword+"\""+","+"\""+date+"\""+","+"\""+domain+"\""+","+"\""+source+"\""+ "," +"\""+copyright+"\"");
+	 				
+	 			}
+	 		}
+	         
+	        
+	 		
+	 		for(String key:sortedSecondType.keySet()) {
+	 			for(SecondDataSheet dats:excelReader.getSecondData().get(key)) {
+	 				String title = dats.getTitle();
+	 				String picNum = dats.getPicNum();
+	 				String Type = dats.getType();
+	 				String caption = dats.getCaption();
+	 				String pageNum = dats.getPage();
+	 				
+	 				lines2.add(key+","+"\""+title+"\""+","+"\""+picNum+"\""+","+"\""+Type+"\""+","+"\""+caption+"\""+","+"\""+pageNum+"\"");
+	 			}
+	 		}
+	 		
+	 		 for(String line:lines1){
+		            dos1.write((line+"\n").getBytes());
+		         }
+		         dos1.close();
+		         fos1.close();
+		         
+		         for(String line:lines2){
+			            dos2.write((line+"\n").getBytes());
+			         }
+			         dos2.close();
+			         fos2.close();    
+	      } catch (IOException e) {
+	         e.printStackTrace();
+	      } 
+			System.out.println("complete");
 		
-		for(String key:firstDataMap.keySet()) {
-			for(FirstDataSheet dats:excelReader.getFirstData().get(key)) {
-				String title = dats.getTitle();
-				String summary = dats.getSummary();
-				String keyword = dats.getKeyword();
-				String date = dats.getDate();
-				String domain = dats.getDomain();
-				String source = dats.getSource();
-				String copyright = dats.getCopyright();
-				
-				firstPrinter.printRecord(key, title, summary, keyword, date, domain, source, copyright);
-			}
-		}
 		
-		FileWriter secondOut = new FileWriter(secondFileName);
-		CSVPrinter secondPrinter = CSVFormat.DEFAULT
-				.withHeader("학번", "제목(반드시 요약문 양식에 입력한 제목과 같아야함.)", "표/그림 일련번호", "자료유형(표,그림,...)", "자료에 나온 표나 그림 설명", "자료가 나온 쪽 번호").print(secondOut);
 		
-		Map<String, ArrayList<SecondDataSheet>> sortedSecondType = new TreeMap<String, ArrayList<SecondDataSheet>>(excelReader.getSecondData());
-		for(String key:sortedSecondType.keySet()) {
-			for(SecondDataSheet dats:excelReader.getSecondData().get(key)) {
-				String title = dats.getTitle();
-				String picNum = dats.getPicNum();
-				String Type = dats.getType();
-				String caption = dats.getCaption();
-				String pageNum = dats.getPage();
-				secondPrinter.printRecord(key, title, picNum, Type, caption, pageNum);
-			}
-		}
-	}
+		
+		
+	   }
+
+
 	
 }
 
